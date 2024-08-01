@@ -1,24 +1,39 @@
 import logo from './logo.svg';
 import './App.css';
+import React, { useEffect, useState } from 'react';
+import api from './api';
 
 function App() {
+
+  const [productos, setProductos] = useState([]);
+  const [clientes, setClientes] = useState([]);
+
+  useEffect(() => {
+    api.get('/Productos')
+      .then(dataP => setProductos(dataP))
+      .catch(error => console.error('Error al cargar productos:', error));
+  
+
+  api.get('/Clientes')
+      .then(dataC => setClientes(dataC))
+      .catch(error => console.error('Error al cargar productos:', error));
+  }, []);
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <div className='divContainer'>
+      {clientes.map(cliente => (
+      <div key={cliente.id}>
+        <h3>{cliente.nombre}</h3>
+        <p>{cliente.apellido}</p>
+      </div>
+    ))}
+    {productos.map(producto => (
+      <div key={producto.id}>
+        <h3>{producto.nombre}</h3>
+        <p>{producto.precio}</p>
+      </div>
+    ))}
+  </div>
   );
 }
 
